@@ -278,8 +278,8 @@ void Ping::send_ping(string rev_host){
 
 //Considerações:
 // Os únicos ponteiro utilizados é o da passagem de parâmetros
-// e os das funções da biblioteca de redes
-// Porém as
+// e os das funções da biblioteca de redes que originalmente recebe ponteiros
+// porém os métodos da classe evitam o uso de ponteiros, com exeção da checksum().
 int main(int argc, char *argv[]) 
 { 
 	//Verifica argumentos passados como parâmetros na chamada do comando
