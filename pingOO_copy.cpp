@@ -1,4 +1,6 @@
 // Adaptado de https://www.geeksforgeeks.org/ping-in-c/
+
+//ver também: https://github.com/patrick--/pico-ping/blob/master/src/ping_service.cpp
 #include <stdio.h> 
 #include <sys/types.h> 
 #include <sys/socket.h> 
@@ -204,7 +206,6 @@ void Ping::send_ping(int ping_sockfd, struct sockaddr_in &ping_addr, string ping
 
 	clock_gettime(CLOCK_MONOTONIC, &tfs); 
 
-	
 	// set socket options at ip to TTL and value to 64, 
 	// change to what you want by setting ttl_val 
 	if (setsockopt(this->sockfd, SOL_IP, IP_TTL, &ttl_val, sizeof(ttl_val)) != 0) 
@@ -240,7 +241,6 @@ void Ping::send_ping(int ping_sockfd, struct sockaddr_in &ping_addr, string ping
 		pckt.hdr.un.echo.sequence = msg_count++; 
 		pckt.hdr.checksum = checksum(&pckt, sizeof(pckt)); 
 
-
 		usleep(PING_SLEEP_RATE); 
 		//void Ping::send_ping(int ping_sockfd, struct sockaddr_in &ping_addr, string ping_dom, string ping_ip, string rev_host){
 		//send packet 
@@ -248,32 +248,14 @@ void Ping::send_ping(int ping_sockfd, struct sockaddr_in &ping_addr, string ping
 		//if ( sendto(ping_sockfd, &pckt, sizeof(pckt), 0, (struct sockaddr*) ping_addr, sizeof(*ping_addr)) <= 0) 
 		
 		//obtém o ponteiro do unique_ptr
-		// struct sockaddr * ping_addr_ptr;
-		// ping_addr_ptr = (struct sockaddr *) &ping_addr;
-		// struct sockaddr *ping_addr2;
-		struct sockaddr_in *dest_addr;
-		dest_addr = &(this->addr_con);
 
-		struct socklen_t dest_addr_len = sizeof(struct sockaddr_in);
-
-		//em C
-//		int ping_sockfd;//as parameter
-//		struct ping_pkt pckt; 
-//		sizeof(pckt);
-//		struct sockaddr_in *ping_addr
-//		if ( sendto(ping_sockfd, &pckt, sizeof(pckt), 0, (struct sockaddr*) ping_addr, sizeof(*ping_addr)) <= 0) 
-//		//Documentação (https://linux.die.net/man/2/sendto)	
-//		ssize_t sendto(int sockfd, const void *buf, size_t len, int flags, const struct sockaddr *dest_addr, socklen_t addrlen);
-		//Fim em C
-
-		//if ( sendto(this->sockfd, &pckt, sizeof(pckt), 0, ping_addr_ptr, sizeof(ping_addr_ptr)) <= 0) 
-		if   ( sendto(this->sockfd, &pckt, sizeof(pckt), 0, &dest_addr, sizeof(struct socklen_t)) <= 0) 
+//		struct sockaddr_in dest_addr;
+//		dest_addr = (this->addr_con);
+		if   ( sendto(this->sockfd, &pckt, sizeof(pckt), 0,(struct sockaddr *) &(this->addr_con), sizeof(this->addr_con)) <= 0) 
 		{
-			printf("\nPacket Sending Failed! \n"); 
+			printf("\nPacket Sending Failed! (1)\n"); 
 			flag=0; 
 		}
-
-		//receive packet 
 		addr_len= sizeof(r_addr); 
 
 
